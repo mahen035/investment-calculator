@@ -1,19 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
+
+const initialUserInput = {
+    'current-savings' : 10000,
+    'yearly-contribution' : 1200,
+    'expected-return' : 7,
+    duration : 10
+}
 
 function UserInput(props) {
 
+    const [userInput, setUserInput] = useState(initialUserInput)
+
    const handleSubmit = (event)=>{
         event.preventDefault();
-        console.log('Form Submitting...')
+        
+        props.onCalculate(userInput);
    }
 
    const handleReset = ()=>{
-      console.log('Resetting...')
+      setUserInput(initialUserInput)
    }
 
    const inputChangeHandler = (input, value) => {
-       console.log('INPUT: '+input)
-       console.log('VALUE: '+value)
+      setUserInput((prevInput) => {
+        return {
+            ...prevInput,
+            [input] : value
+        }
+      })
    }
     return (
         <div>
@@ -23,13 +37,15 @@ function UserInput(props) {
                         <lable htmlFor="current-savings">Current Savings ($)</lable>
                         <input type="number" id="current-savings" onChange={(event)=>{
                             inputChangeHandler('current-savings', event.target.value)
-                        }}/>
+                        }}
+                        value={userInput['current-savings']}/>
                     </p>
                     <p>
                         <lable htmlFor="yearly-contribution">Yearly Savings ($)</lable>
                         <input type="number" id="yearly-contribution" onChange={(event)=>{
                             inputChangeHandler('yearly-contribution', event.target.value)
-                        }}/>
+                        }}
+                        value={userInput['yearly-contribution']}/>
                     </p>
                </div>
              <div className='input-group'>
@@ -37,13 +53,15 @@ function UserInput(props) {
               <lable htmlFor="expected-return">Expected Interest (%, per year)</lable>
               <input type="number" id="expected-return" onChange={(event)=>{
                             inputChangeHandler('expected-return', event.target.value)
-                        }}/>
+                        }}
+                        value={userInput['expected-return']}/>
           </p>
           <p>
               <lable htmlFor="duration">Investment Duration (years)</lable>
               <input type="number" id="duration" onChange={(event)=>{
                             inputChangeHandler('duration', event.target.value)
-                        }}/>
+                        }}
+                        value={userInput.duration}/>
           </p>
         </div>
         
